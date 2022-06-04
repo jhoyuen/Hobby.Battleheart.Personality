@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Fantasy Character Class Matrix</title>
+		<link rel="shortcut icon" type="image/jpg" href="images/Site-favicon.ico"/>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+		
+		<style type="text/css">
+			* {
+				-webkit-print-color-adjust: exact !important;   /* Chrome, Safari, Edge */
+				color-adjust: exact !important;                 /*Firefox*/
+			}
+
+			body{
+				font-family: Sans-Serif;
+				font-size: 12px;
+				background:#dfdbc3;
+			}
+			h3{
+				font-family: Sans-Serif;
+				margin-top: 0;
+				margin-bottom: 8px;
+			}
+			img{
+				width: 32px;
+				height: 32px;
+				border-radius: 5px;
+				display: block;
+				cursor: pointer;
+				margin-top: 5px;
+			}
+			@media print{
+			   img{
+					width: 32px;
+					height: 32px;
+					border-radius: 5px;
+					display: block;
+					cursor: pointer;
+					margin-top: 5px;
+				}
+			}
+			a{
+				font-family: Sans-Serif;
+				font-size: 11px;
+				font-weight: bold;
+				text-decoration: none;
+				outline: none;
+				color: black;
+				padding: 5px 8px;
+				border-radius: 8px;
+				box-shadow: 0px 5px 5px rgb(0 0 0 / 50%);
+				background: #dedede;
+				border: solid 1px silver;
+				margin: 0 auto;
+			}
+			a:hover{
+				background: black;
+				color: white;
+				border: solid 1px black;
+			}
+			input[type=number]{
+				border: solid 1px silver;
+				border-color: #dedede;
+				border-radius: 5px;
+				user-select: none;
+				padding:5px;
+				outline: none !important;
+			}
+			select {
+				border: solid 1px silver;
+				border-color: #dedede;
+				border-radius: 5px;
+				padding:5px;
+				outline: none !important;
+			}
+			.disabled {
+				 filter: grayscale( 100% );
+				 -webkit-filter: grayscale( 100% );
+				 cursor: default;
+			}
+			.enabled {
+				 filter: grayscale( 0% );
+				 -webkit-filter: grayscale( 0% );
+				 cursor: pointer;
+			}
+			.selected {
+				border-radius: 16px;
+				box-shadow: 0px 5px 5px rgb(0 0 0 / 50%);
+			}
+			div.panel{
+				width:444px;
+				margin: 0 auto;
+			}
+			div.instructions, div.information, div.results {
+				width:420px;
+				font-size: 12px;
+				background: #d7d3bc;
+				border: solid 1px silver;
+				border-radius: 5px;
+				margin: 10px 0;
+				padding: 10px;
+			}
+			div.instructions {
+				min-height: 75px;
+			}
+			div.information {
+				display: none;
+				min-height: 110px;
+			}
+			div.results {
+				display: none;
+				margin-top: 16px;
+			}
+			div.skills, div.buttons{
+				text-align: center;
+			}
+			div.skills{
+				width: 437px;
+			}
+			div.buttons{
+				margin-top: 10px;
+			}
+			div.skills-col{
+				display:inline-block;
+			}
+			div.myPoints{
+				margin-bottom: 8px;
+			}
+			div.myPointsValue, div.mySkillsValue, div.totalSkillsValue {
+				display: inline;
+				font-weight: bold;
+			}
+			
+			table.statsTable td, table.statsTable th {
+				text-align: center;
+				padding: 0 6px 0 0;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Instructions -->
+		<div class="panel">
+			<div class="instructions">
+				<h3>Instructions</h3>
+				<strong>STEP 1:</strong> Allocate 150 points between Strength, Dexterity, Intelligence, Skill, Endurance, Charisma attributes.<br>
+				<strong>STEP 2:</strong> Click and choose up to 24 skills icons.<br>
+				<strong>STEP 3:</strong> Click the COMPLETE button to generate your RPG class profile.<br>
+				<strong>STEP 4:</strong> Click the PRINT button to print your RPG class profile.<br>
+				<strong>STEP 5:</strong> Click the RESET button to refresh your selections.<br>
+			</div>
+		</div>
+		<!-- My Points -->
+		<div class="panel myPoints">
+			Your <strong>current points</strong> remaining: <div class="myPointsValue">150</div> points<br />
+			Your <strong>current skills</strong> selected: <div class="mySkillsValue"></div> / <div class="totalSkillsValue"></div>  
+			
+		</div>
+		<!-- Points allocator -->
+		<div class="panel pointsAlloc">
+			<input id="txtSTR" name="txtSTR" type="number" min="0" max="50" placeholder="STR" data-info="Strength (STR) allow you to wield more powerful melee weapons, deal more damage with them and utilize many hand-to-hand combat skills.">
+			<input id="txtDEX" name="txtDEX" type="number" min="0" max="50" placeholder="DEX" data-info="Dexterity (DEX) allows the use of bows and other light weapons, increases their effectiveness, and improves your ability to dodge attacks.">
+			<input id="txtINT" name="txtINT" type="number" min="0" max="50" placeholder="INT" data-info="Intelligence (INT) is the primary stat of spellcasters, increases the power of magical skills and allows you to wield staves and other arcane tools.">
+			<input id="txtSKL" name="txtSKL" type="number" min="0" max="50" placeholder="SKL" data-info="Skill (SKL) increases the critical hit chance of all attacks and is key to wielding many diverse spells and abilities.">
+			<input id="txtEND" name="txtEND" type="number" min="0" max="50" placeholder="END" data-info="Endurance (END) affects your maximum health and allows the use of heavy armor, as well as many abilities demanding a rugged constitution.">
+			<input id="txtCHA" name="txtCHA" type="number" min="0" max="50" placeholder="CHA" data-info="Charisma (CHA) improves the prices of items you buy and sell and is demanded by skills that require great leadership and willpower.">
+		</div>
+		<!-- skill tiles -->
+		<div class="panel">
+			<div class="skills">
+				<!-- <img src="" title="" class="" data-skill="" data-description="" data-cooldown="" data-str="" data-dex="" data-int="" data-skl="" data-end="" data-cha="" /> -->
+				<!-- Barbarian -->
+				<div class="skills-col">
+					<img src="images/Skill-barbarian-enrage.png" title="Enrage" class="barbarian warrior" data-skill="Enrage" data-description="Fly into a rage for 10 seconds, increasing all damage dealt AND received by 40%." data-cooldown="20 Sec" data-str="9" data-dex="" data-int="" data-skl="6" data-end="" data-cha="" />
+					<img src="images/Colossal_Weapons.png" title="Colossal Weapons" class="barbarian warrior" data-skill="Colossal Weapons" data-description="Allows the use of colossal two-handed weapons." data-cooldown="Passive"  data-str="11" data-dex="" data-int="" data-skl="6" data-end="" data-cha="" />
+					<img src="images/Whirlwind.png" title="Whirlwind" class="barbarian warrior" data-skill="Whirlwind" data-description="Unlease a spiral of death, dealing 3.6x normal damage to all nearby foes.  Requires a colossal weapon." data-cooldown="15 Sec"  data-str="13" data-dex="" data-int="" data-skl="7" data-end="" data-cha="" />
+					<img src="images/Reckless_Blow.png" title="Reckless Blow" class="barbarian warrior" data-skill="Reckless Blow" data-description="A wild attack that deals 6x normal damage, but also damages you for 30% of your current health. Requires a colossal weapon." data-cooldown="8 Sec"  data-str="15" data-dex="" data-int="" data-skl="8" data-end="" data-cha="" />
+					<img src="images/Death_Wish.png" title="Death Wish" class="barbarian" data-skill="Death Wish" data-description="You deal extra damage the lower your current health is, reaching as high as 30% extra damage." data-cooldown="Passive"  data-str="18" data-dex="" data-int="" data-skl="8" data-end="6" data-cha="" />
+					<img src="images/Savage_Pounce.png" title="Savage Pounce" class="barbarian" data-skill="Savage Pounce" data-description="Leap at your target, dealing 2x weapon power as crushing damage around the point of impact." data-cooldown="8 Sec" data-str="20" data-dex="" data-int="" data-skl="9" data-end="7" data-cha="" />
+					<img src="images/Frenzy.png" title="Frenzy" class="barbarian" data-skill="Frenzy" data-description="Enter a frenzied state for 8 seconds, greatly increasing attack speed and cooldown speed." data-cooldown="15 Sec"  data-str="23" data-dex="" data-int="" data-skl="10" data-end="7" data-cha="" />
+					<img src="images/Deep_Wounds.png" title="Deep Wounds" class="barbarian" data-skill="Deep Wounds" data-description="Your critical hits with bladed weapons cause enemies to bleed for additional damage." data-cooldown="Passive" data-str="25" data-dex="" data-int="" data-skl="12" data-end="7" data-cha="" />
+					<img src="images/Banish.png" title="Banish" class="barbarian" data-skill="Banish" data-description="Strike your target for 2.2x damage and send them flying, knocking them down for 5 sec. Requires a colossal weapon." data-cooldown="15 Sec" data-str="29" data-dex="" data-int="" data-skl="13" data-end="7" data-cha="" />
+					<img src="images/Adrenaline_Rush.png" title="Adrenaline Rush" class="barbarian" data-skill="Adrenaline Rush" data-description="When you kill an enemy, you recover some health, and gain a temporary movement speed increase." data-cooldown="Passive" data-str="32" data-dex="" data-int="" data-skl="14" data-end="8" data-cha="" />
+					<img src="images/Last_Stand.png" title="Last Stand" class="barbarian" data-skill="Last Stand" data-description="Become immune to all damage for 8 seconds.  Can only be used when your health is below 30%.	" data-cooldown="40 Sec" data-str="35" data-dex="" data-int="" data-skl="15" data-end="10" data-cha="" />
+					<img src="images/Slaughter.png" title="Slaughter" class="barbarian" data-skill="Slaughter" data-description="Increases critical strike chance with axes by 10%" data-cooldown="Passive" data-str="39" data-dex="" data-int="" data-skl="17" data-end="10" data-cha="" />
+					<img src="images/Quake_Strike.jpg" title="Quake Strike" class="barbarian" data-skill="Quake Strike" data-description="Rend the earth in a line towards your target, dealing 4x damage to all targets in the path.  Requires a colossal weapon." data-cooldown="20 Sec" data-str="44" data-dex="" data-int="" data-skl="19" data-end="10" data-cha="" />
+				</div>
+				<!-- Bard -->
+				<div class="skills-col">
+					<img src="images/Skill-bard-charm.png" title="Charm" class="bard swashbuckler" data-skill="Charm" data-description="Charms an enemy, forcing them to fight for you for 10 seconds." data-cooldown="30 sec" data-str="" data-dex="" data-int="" data-skl="" data-end="" data-cha="8" />
+					<img src="images/Psv-bard-lucky.png" title="Lucky" class="bard" data-skill="Lucky" data-description="Increases all gold acquired by 25%." data-cooldown="Passive" data-str="" data-dex="6" data-int="" data-skl="" data-end="" data-cha="9" />
+					<img src="images/Skill-bard-thrust.png" title="Thrust" class="bard swashbuckler" data-skill="Thrust" data-description="Deals 3.5x weapon damage, and against stunned or helpless enemies always deals a critical strike. Requires a piercing melee weapon." data-cooldown="10 sec" data-str="" data-dex="8" data-int="" data-skl="" data-end="" data-cha="10" />
+					<img src="images/Skill-bard-songofwar.png" title="Song of War" class="bard warlord druid" data-skill="Song of War" data-description="Increases all damage done, and reduces all damage taken by 15% for 20 seconds." data-cooldown="45 sec" data-str="" data-dex="9" data-int="" data-skl="" data-end="" data-cha="12" />
+					<img src="images/Psv-bard-quickstudy.png" title="Quick Study" class="bard" data-skill="Quick Study" data-description="Increases all XP acquired by 10%." data-cooldown="Passive" data-str="" data-dex="10" data-int="" data-skl="" data-end="" data-cha="15" />
+					<img src="images/Skill-bard-songofvigor.png" title="Song of Vigor" class="bard druid" data-skill="Song of Vigor" data-description="A soothing tune which slowly heals your wounds over 20 seconds." data-cooldown="45 sec" data-str="" data-dex="11" data-int="" data-skl="" data-end="" data-cha="18" />
+					<img src="images/Skill-bard-disarm.png" title="Disarm" class="bard swashbuckler" data-skill="Disarm" data-description="Renders your enemy unarmed for 15 seconds, forcing them to fight with their fists. Requires a melee weapon." data-cooldown="25 sec" data-str="" data-dex="13" data-int="" data-skl="" data-end="" data-cha="20" />
+					<img src="images/Favored_Soul.png" title="Favored Soul" class="bard" data-skill="Favored Soul" data-description="Increases the duration of positive status effects by 25%." data-cooldown="Passive " data-str="" data-dex="15" data-int="" data-skl="" data-end="" data-cha="22" />
+					<img src="images/Sly_Wink.png" title="Sly Wink" class="bard swashbuckler" data-skill="Sly Wink" data-description="Increases the damage dealt by charmed foes by 50% while under your influence." data-cooldown="Passive" data-str="" data-dex="16" data-int="7" data-skl="" data-end="" data-cha="24" />
+					<img src="images/Riposte.png" title="Riposte" class="bard swashbuckler" data-skill="Riposte" data-description="Enter a stance which deflects and counters the next melee attack against you. Requires a melee weapon." data-cooldown="15 sec" data-str="" data-dex="19" data-int="7" data-skl="" data-end="" data-cha="26" />
+					<img src="images/Lullaby.png" title="Lullaby" class="bard" data-skill="Lullaby" data-description="Instantly puts all nearby enemies to sleep for 10 seconds. Any damage will wake them, however." data-cooldown="30 sec" data-str="" data-dex="20" data-int="8" data-skl="" data-end="" data-cha="30" />
+					<img src="images/Generalist.png" title="Generalist" class="bard swashbuckler" data-skill="Generalist" data-description="Reduces the stat requirements for equiping items or learning skills by 30%." data-cooldown="Passive" data-str="" data-dex="21" data-int="10" data-skl="" data-end="" data-cha="33" />
+					<img src="images/Song_of_Inspiration.png" title="Song of Inspiration" class="bard" data-skill="Song of Inspiration" data-description="Instantly resets the cooldown of all of your other skills." data-cooldown="22" data-str="" data-dex="" data-int="12" data-skl="" data-end="" data-cha="37" />
+				</div>
+				<!-- Battlemage -->
+				<div class="skills-col">
+					<img src="images/Skill-battlemage-flameweapon.png" title="Flame Weapon" class="battlemage hero" data-skill="Flame Weapon" data-description="While active, weapon attacks deal fire damage, are strenghtened by your spell power, and have a 10% increased crit chance. Lasts until cancelled." data-cooldown="10 Sec" data-str="8" data-dex="" data-int="8" data-skl="" data-end="" data-cha="" />	
+					<img src="images/Mana_Strike.jpg" title="Mana Strike" class="battlemage hero" data-skill="Mana Strike" data-description="Requires Flame, Arctic or Thundering Weapon active, and behaves differently with each*. Changing elements resets Mana Strike's cooldown." data-cooldown="10 Sec" data-str="10" data-dex="" data-int="9" data-skl="" data-end="" data-cha="" />
+					<img src="images/Arcane_Potency.jpg" title="Arcane Potency" class="battlemage" data-skill="Arcane Potency" data-description="Increases critical damage with all spells by 50%." data-cooldown="Passive" data-str="11" data-dex="" data-int="11" data-skl="" data-end="" data-cha="" />	
+					<img src="images/Arctic_Weapon.png" title="Artic Weapon" class="battlemage hero" data-skill="Artic Weapon" data-description="While active, weapon attacks deal ice damage, are strengthened by your spell power, and randomly chill your foes. Lasts until cancelled." data-cooldown="10 Sec" data-str="13" data-dex="" data-int="12" data-skl="" data-end="" data-cha="" />
+					<img src="images/Ghost_Hand.png" title="Ghost Hand" class="battlemage summoner" data-skill="Ghost Hand" data-description="Your target is seized by an arcane force, pulling them into melee range and briefly stunning them in the process." data-cooldown="6 Sec" data-str="15" data-dex="" data-int="14" data-skl="" data-end="" data-cha="" />	
+					<img src="images/Time_Warp.png" title="Time Warp" class="battlemage" data-skill="Time Warp" data-description="Grants a 5% chance for your abilities to not consume their cooldown when used." data-cooldown="Passive" data-str="17" data-dex="" data-int="16" data-skl="" data-end="" data-cha="" />	
+					<img src="images/Thundering_Weapon.png" title="Thundering Weapon" class="battlemage hero" data-skill="Thundering Weapon" data-description="While active, weapon attacks deal lightning damage, are strenghtened by your spell power, and randomly stun your foes. Lasts until cancelled." data-cooldown="10 Sec" data-str="19" data-dex="" data-int="18" data-skl="" data-end="" data-cha="" />	
+					<img src="images/Spell_Eater.png" title="Spell Eater" class="battlemage sorcerer" data-skill="Spell Eater" data-description="Grants you a 20% chance that whenever you are struck by a spell, it heals you instead of harming you." data-cooldown="Passive" data-str="21" data-dex="" data-int="21" data-skl="" data-end="" data-cha="" />	
+					<img src="images/Backlash.png" title="Backlash" class="battlemage" data-skill="Backlash" data-description="Removes all negative effects from your body, and unleashes a retaliatory explosion around you." data-cooldown="1 sec" data-str="24" data-dex="" data-int="23" data-skl="" data-end="" data-cha="" />	
+					<img src="images/Elemental_Warding.png" title="Elemental Warding" class="battlemage sorcerer" data-skill="Elemental Warding" data-description="Reduces all fire, frost and lightning damage taken by 25%." data-cooldown="Passive" data-str="26" data-dex="" data-int="26" data-skl="" data-end="" data-cha="" />	
+					<img src="images/Twin_Disciplines.png" title="Twin Disciplines" class="battlemage hero" data-skill="Twin Disciplines" data-description="Your physical attacks have a 10% chance to grant your next magic attack 100% chance to critically strike." data-cooldown="Passive" data-str="29" data-dex="" data-int="29" data-skl="" data-end="" data-cha="" />	
+					<img src="images/Silence.png" title="Silence" class="battlemage" data-skill="Silence" data-description="Disrupt the magical abilities of all nearby enemies, preventing them from casting spells for 8 seconds." data-cooldown="25 Sec" data-str="32" data-dex="" data-int="32" data-skl="" data-end="" data-cha="" />	
+					<img src="images/Aegis.png" title="Aegis" class="battlemage" data-skill="Aegis" data-description="Grants a mystical shield which absorbs damage equal to 5x your spell power. If the shield breaks, your damage dealt is increased 20% for 5 seconds." data-cooldown="15 Sec" data-str="35" data-dex="" data-int="36" data-skl="" data-end="" data-cha="" />					
+				</div>
+				<!-- Knight -->
+				<div class="skills-col">
+					<img src="images/Skill-knight-powerattack.png" title="Power Attack" class="knight warrior swashbuckler hexblade warlord" data-skill="Power Attack" data-description="Deliver a powerful melee strike with your primary weapon. Deals 3x normal damage. Requires a melee weapon." data-cooldown="6 sec" data-str="" data-dex="" data-int="" data-skl="" data-end="" data-cha="" />
+					<img src="images/Skill-knight-cleave.png" title="Cleave" class="knight warrior hexblade warlord" data-skill="Cleave" data-description="Deals 2.5x normal weapon damage to all enemies in front of you. Requires a melee weapon." data-cooldown="10 sec" data-str="6" data-dex="" data-int="" data-skl="" data-end="" data-cha="" />
+					<img src="images/Psv-knight-shield_training.png" title="Shield Training" class="knight warlord hero cleric" data-skill="Shield Training" data-description="Allows the use of shields." data-cooldown="Passive" data-str="" data-dex="6" data-int="" data-skl="" data-end="6" data-cha="" />
+					<img src="images/Skill-knight-defend.png" title="Defend" class="knight warlord cleric" data-skill="Defend" data-description="Ready your shield, absorbing all physical damage for 4 seconds. Requires a shield equipped." data-cooldown="15 sec" data-str="8" data-dex="" data-int="" data-skl="" data-end="7" data-cha="" />
+					<img src="images/Psv-knight-armsman.png" title="Armsman" class="knight warrior swashbuckler" data-skill="Armsman" data-description="Increases damage with all bladed weapons by 10%." data-cooldown="Passive" data-str="9" data-dex="" data-int="" data-skl="" data-end="9" data-cha="" />
+					<img src="images/Skill-knight-intimidate.png" title="Intimidate" class="knight warrior warlord" data-skill="Intimidate" data-description="A terrifying shout which paralyzes your target in fear, and forces other nearby enemies to panic for 5 seconds." data-cooldown="24 sec" data-str="11" data-dex="" data-int="" data-skl="" data-end="11" data-cha="" />
+					<img src="images/Skill-knight-shieldwall.png" title="Shield Wall" class="knight" data-skill="Shield Wall" data-description="Reduces all damage you take by 50% for 10 seconds. Requires a shield." data-cooldown="30 sec" data-str="12" data-dex="" data-int="" data-skl="" data-end="14" data-cha="" />
+					<img src="images/Psv-knight-grit.png" title="Grit" class="knight warrior hexblade" data-skill="Grit" data-description="Increases weapon damage by 50% of your endurance, and reduces the duration of negative status effects by 50%." data-cooldown="Passive" data-str="14" data-dex="" data-int="" data-skl="" data-end="17" data-cha="" />
+					<img src="images/Knight_Shield_Rush.png" title="Shield Rush" class="knight warlord" data-skill="Shield Rush" data-description="Charges your target, knocking them down and dealing damage.  Requires a shield, and a minimum distance from the target." data-cooldown="8 Sec" data-str="16" data-dex="" data-int="" data-skl="" data-end="21" data-cha="" />
+					<img src="images/Knight_Sundering_Strikes.png" title="Sundering Strikes" class="knight warrior warlord" data-skill="Sundering Strikes" data-description="Your attacks erode your enemies armor, causing 2% additional damage taken, stacking up to 5x." data-cooldown="Passive" data-str="18" data-dex="" data-int="" data-skl="" data-end="25" data-cha="" />
+					<img src="images/Kn_Victory_Banner.png" title="Victory Banner" class="knight warlord" data-skill="Victory Banner" data-description="Plants a battle standard on the field for 15 seconds. While within its area of effect, your crit chance is increased by 50%, and your damage by 20%." data-cooldown="45 sec" data-str="21" data-dex="" data-int="" data-skl="" data-end="29" data-cha="" />
+					<img src="images/Kn_Chivalry.png" title="Chivalry" class="knight" data-skill="Chivalry" data-description="Increases your armor by 25%" data-cooldown="Passive" data-str="24" data-dex="" data-int="" data-skl="" data-end="34" data-cha="" />
+					<img src="images/Knight_reveng2e.png" title="Revenge" class="knight hexblade warlord" data-skill="Revenge" data-description="For 6 seconds, all enemies who dare strike you instantly take damage. The damage is increased by your own strength, as well as the force of the incoming blow." data-cooldown="30 sec" data-str="28" data-dex="" data-int="" data-skl="" data-end="38" data-cha="" />				
+				</div>
+				<!-- Monk -->
+				<div class="skills-col">
+					<img src="images/1000_Palms.png" title="1000 Palms" class="monk" data-skill="1000 Palms" data-description="A flurry of unarmed strikes that deals 7x normal damage divided evenly among all targets in front of you. Requires unarmed/fist weapons." data-cooldown="8 sec" data-str="6" data-dex="7" data-int="" data-skl="" data-end="" data-cha="" />	
+					<img src="images/Thundering_Blows.png" title="Thundering Blows" class="monk" data-skill="Thundering Blows" data-description="Increases all damage dealt with blunt weapons and unarmed attacks by 10%." data-cooldown="Passive" data-str="7" data-dex="8" data-int="" data-skl="" data-end="" data-cha="" />	
+					<img src="images/Karma_Kick.png" title="Karma Kick" class="monk" data-skill="Karma Kick" data-description="Launch yourself at your target, delivering a flying kick which deals more damage the lower your current health is." data-cooldown="10 sec" data-str="8" data-dex="10" data-int="" data-skl="" data-end="" data-cha="" />	
+					<img src="images/Wind_Walk.png" title="Wind Walk" class="monk" data-skill="Wind Walk" data-description="Teleport to all nearby enemies, striking for 2x damage and slowing their movement speed. A minimum of 3 strikes occur. Requires unarmed/fist weapons." data-cooldown="16 sec" data-str="10" data-dex="11" data-int="" data-skl="" data-end="" data-cha="" />	
+					<img src="images/Dragon_Style.png" title="Dragon Style" class="monk" data-skill="Dragon Style" data-description="While wearing light armor, your damage is increased by 5%." data-cooldown="Passive" data-str="12" data-dex="13" data-int="" data-skl="" data-end="" data-cha="" />	
+					<img src="images/Spirit_Trance.png" title="Spirit Trance" class="monk druid cleric" data-skill="Spirit Trance" data-description="Enter a state of mental tranquility, increasing your movement speed and granting you health regeneration for 10 sec." data-cooldown="30 sec" data-str="13" data-dex="15" data-int="" data-skl="" data-end="6" data-cha="" />	
+					<img src="images/Evasion.png" title="Evasion" class="monk samurai" data-skill="Evasion" data-description="Increases your dodge chance by 10%." data-cooldown="Passive" data-str="14" data-dex="17" data-int="" data-skl="" data-end="7" data-cha="" />	
+					<img src="images/Ki_Shot.png" title="Ki Shot" class="monk" data-skill="Ki Shot" data-description="Focus your Ki into a projectile, which deals heavy damage on contact with your target." data-cooldown="30 sec" data-str="16" data-dex="20" data-int="" data-skl="" data-end="7" data-cha="" />	
+					<img src="images/Concussion.png" title="Concussion" class="monk" data-skill="Concussion" data-description="Your critical strikes with blunt weapons have a 50% chance to knock enemies down for 2 seconds." data-cooldown="Passive" data-str="19" data-dex="22" data-int="" data-skl="" data-end="7" data-cha="" />	
+					<img src="images/Pressure_Point.png" title="Pressure Point" class="monk" data-skill="Pressure Point" data-description="The slightest touch to a vital spot leaves your target paralyzed for 5 seconds. Requires unarmed/fist weapons." data-cooldown="20 sec" data-str="21" data-dex="24" data-int="" data-skl="" data-end="8" data-cha="" />	
+					<img src="images/Empty_Body.png" title="Empty Body" class="monk samurai druid" data-skill="Empty Body" data-description="For 4 seconds you become incorpporeal, increasing your dodge chance to 100%." data-cooldown="30 sec" data-str="22" data-dex="27" data-int="" data-skl="" data-end="10" data-cha="" />	
+					<img src="images/Counter_Strike.png" title="Counter Strike" class="monk samurai" data-skill="Counter Strike" data-description="Whenever you dodge an attack, you instantly deal damage to your attacker." data-cooldown="Passive" data-str="25" data-dex="30" data-int="" data-skl="" data-end="10" data-cha="" />	
+					<img src="images/Ki_Blast.png" title="Ki Blast" class="monk" data-skill="Ki Blast" data-description="Unleash a shockwave of Ki around your body, dealing damage and knocking down nearby foes." data-cooldown="20 sec" data-str="28" data-dex="32" data-int="" data-skl="" data-end="12" data-cha="" />					
+				</div>
+				<!-- Necromancer -->
+				<div class="skills-col">
+					<img src="images/Raise_Skeleton.png" title="Raise Skeleton" class="necromancer summoner" data-skill="Raise Skeleton" data-description="Manifest a skeleton warrior for 10 seconds from the remains of a fallen enemy. You can have multiple skeletons, though you can't exceed 5 companions." data-cooldown="1 sec" data-str="" data-dex="" data-int="10" data-skl="" data-end="" data-cha="7" />
+					<img src="images/Tainted_Blood.png" title="Tainted Blood" class="necromancer hexblade warlock" data-skill="Tainted Blood" data-description="Increases your resistance to both holy and unholy damage by 25%." data-cooldown="Passive" data-str="" data-dex="" data-int="12" data-skl="" data-end="" data-cha="8" />
+					<img src="images/Wandering_Plague.png" title="Wandering Plague" class="necromancer" data-skill="Wandering Plague" data-description="Applies an everlasting poison to your target. When this target dies, the plague can transfer to other nearby foes." data-cooldown="30 sec" data-str="" data-dex="" data-int="14" data-skl="" data-end="" data-cha="9" />
+					<img src="images/Withering.png" title="Withering" class="necromancer hexblade warlock" data-skill="Withering" data-description="Increases the critical strike chance of all periodic damage effects by 10%." data-cooldown="Passive" data-str="" data-dex="" data-int="16" data-skl="" data-end="" data-cha="10" />
+					<img src="images/Summon_Mummy.png" title="Summon Mummy" class="necromancer warlock summoner" data-skill="Summon Mummy" data-description="Conjures a powerful mummy, which is highly durable and deals heavy damage." data-cooldown="15 sec" data-str="" data-dex="" data-int="19" data-skl="" data-end="" data-cha="11" />
+					<img src="images/Corpse_Explosion.png" title="Corpse Explosion" class="necromancer" data-skill="Corpse Explosion" data-description="Up to 3 nearby corpses explode violently, dealing fire damage to their still-living allies." data-cooldown="10 sec" data-str="" data-dex="" data-int="22" data-skl="" data-end="" data-cha="12" />
+					<img src="images/Army_of_Doom.png" title="Army of Doom" class="necromancer summoner" data-skill="Army of Doom" data-description="Increases the health and duration of your summoned minions by 50%." data-cooldown="Passive" data-str="" data-dex="" data-int="25" data-skl="" data-end="" data-cha="13" />
+					<img src="images/Dark_Harvest.png" title="Dark Harvest" class="necromancer" data-skill="Dark Harvest" data-description="Destroy a nearby corpse and consume its life energy, healing you. (fallen Skeletons from Raise Skeletons also work)" data-cooldown="10 sec" data-str="" data-dex="" data-int="28" data-skl="" data-end="7" data-cha="13" />
+					<img src="images/Cursed_Knowledge.png" title="Cursed Knowledge" class="necromancer hexblade warlock" data-skill="Cursed Knowledge" data-description="Increases the damage you deal to undead creatures and constructs by 15%." data-cooldown="Passive" data-str="" data-dex="" data-int="32" data-skl="" data-end="7" data-cha="14" />
+					<img src="images/Mass_Hysteria.png" title="Mass Hysteria" class="necromancer warlock" data-skill="Mass Hysteria" data-description="Your target and all surrounding enemies are consumed by madness, attacking each other for 6 seconds." data-cooldown="30 sec" data-str="" data-dex="" data-int="35" data-skl="" data-end="7" data-cha="17" />
+					<img src="images/Soul_Mass.png" title="Soul Mass" class="necromancer warlock summoner" data-skill="Soul Mass" data-description="Generates a cloud of malevolent spirits which seeks out and explode upon the nearest enemy, dealing unholy damage." data-cooldown="12 sec" data-str="" data-dex="" data-int="37" data-skl="" data-end="9" data-cha="19" />
+					<img src="images/Aura_of_Disease.png" title="Aura of Disease" class="necromancer warlock" data-skill="Aura of Disease" data-description="You are surrounded with a cloud of infection which deals poison damage to all nearby enemies." data-cooldown="Passive" data-str="" data-dex="" data-int="39" data-skl="" data-end="12" data-cha="20" />
+					<img src="images/Slay_Living.png" title="Slay Living" class="necromancer warlock" data-skill="Slay Living" data-description="Attempts to instantly destroy your target. If the effect fails, the target instead takes minor unholy damage. Ineffective on all bosses." data-cooldown="15 sec" data-str="" data-dex="" data-int="43" data-skl="" data-end="13" data-cha="22" />				
+				</div>
+				<!-- Ninja -->
+				<div class="skills-col">
+					<img src="images/Skill-ninja-shuriken.png" title="Shuriken" class="ninja" data-skill="Shuriken" data-description="Toss a flurry of 4 shuriken, which target any enemies in front of you." data-cooldown="15 seconds" data-str="7" data-dex="6" data-int="" data-skl="8" data-end="" data-cha="" />	
+					<img src="images/Dual_Wield.png" title="Dual Wield" class="ninja warrior samurai hero" data-skill="Dual Wield" data-description="Allows you to dual wield one-handed melee weapons." data-cooldown="Passive" data-str="7" data-dex="7" data-int="" data-skl="9" data-end="" data-cha="" />	
+					<img src="images/Twin_Strikes.png" title="Twin Strikes" class="ninja samurai" data-skill="Twin Strikes" data-description="Lash out with two weapons at once, striking for 3.5x damage with each hand. Requires dual-wielding." data-cooldown="8 seconds" data-str="8" data-dex="8" data-int="" data-skl="10" data-end="" data-cha="" />	
+					<img src="images/Smoke_Bomb.png" title="Smoke Bomb" class="ninja" data-skill="Smoke Bomb" data-description="Creates a cloud of smoke, making it impossible for enemies to target you with ranged attacks, and increasing your dodge chance 30% while within the cloud." data-cooldown="20 seconds" data-str="9" data-dex="9" data-int="" data-skl="11" data-end="" data-cha="" />	
+					<img src="images/Lethality.png" title="Lethality" class="ninja warrior samurai" data-skill="Lethality" data-description="Increases critical damage by 50%." data-cooldown="Passive" data-str="10" data-dex="10" data-int="" data-skl="13" data-end="" data-cha="" />	
+					<img src="images/Lacerate.png" title="Lacerate" class="ninja samurai" data-skill="Lacerate" data-description="Open a wound on your target which deals damage over time indefinitely. Requires dual-wielding" data-cooldown="12 seconds" data-str="11" data-dex="11" data-int="" data-skl="15" data-end="" data-cha="" />	
+					<img src="images/Flurry.png" title="Flurry" class="ninja warrior samurai" data-skill="Flurry" data-description="Increases attack speed by 10%." data-cooldown="Passive" data-str="12" data-dex="12" data-int="" data-skl="17" data-end="" data-cha="" />	
+					<img src="images/Tranq_Dart.png" title="Tranq Dart" class="ninja" data-skill="Tranq Dart" data-description="Shoots a tranquilizing dart at your target which instantly puts them to sleep for 10 seconds. Taking damage will interrupt this effect." data-cooldown="5 seconds" data-str="13" data-dex="13" data-int="" data-skl="20" data-end="" data-cha="" />	
+					<img src="images/Caltrops.png" title="Caltrops" class="ninja skirmisher" data-skill="Caltrops" data-description="Scatter caltrops around yourself. Any enemies who step on them will take damage and be slowed." data-cooldown="8 seconds" data-str="14" data-dex="15" data-int="" data-skl="23" data-end="" data-cha="" />	
+					<img src="images/Silent_Assassin.png" title="Silent Assassin samurai" class="ninja" data-skill="Silent Assassin" data-description="After killing an enemy, your next movement command causes you to teleport instantly to your destination." data-cooldown="Passive" data-str="15" data-dex="16" data-int="" data-skl="27" data-end="" data-cha="" />	
+					<img src="images/Blade_Rush.png" title="Blade Rush" class="ninja samurai" data-skill="Blade Rush" data-description="Quickly fly at your target, dealing damage to them and all foes in your path. Requires dual-wielding." data-cooldown="12 seconds" data-str="17" data-dex="18" data-int="" data-skl="29" data-end="" data-cha="" />	
+					<img src="images/Impending_Doom.png" title="Impending Doom" class="ninja" data-skill="Impending Doom" data-description="Whenever you land a critical hit, your remaining cooldowns are shortened by 1 second." data-cooldown="Passive" data-str="20" data-dex="19" data-int="" data-skl="31" data-end="" data-cha="" />	
+					<img src="images/Assassinate.png" title="Assassinate" class="ninja" data-skill="Assassinate" data-description="Teleport behind your target and deliver a fatal wound - deals higher damage the lower the victim's current health. Requires a melee weapon." data-cooldown="12 seconds" data-str="23" data-dex="21" data-int="" data-skl="34" data-end="" data-cha="" />					
+				</div>
+				<!-- Paladin -->
+				<div class="skills-col">
+					<img src="images/Divine_Hammer.png" title="Divine Hammer" class="paladin cleric" data-skill="Divine Hammer" data-description="Perform a weapon strike which manifests a divine hammer, striking your foes with holy damage. Requires a melee weapon." data-cooldown="10 sec" data-str="" data-dex="" data-int="" data-skl="" data-end="" data-cha="6" />	
+					<img src="images/Psv-paladin-punishment.png" title="Punishment" class="paladin cleric" data-skill="Punishment" data-description="Increases critical strike chance with unarmed attacks and blunt weapons by 10%" data-cooldown="Passive" data-str="6" data-dex="" data-int="" data-skl="" data-end="" data-cha="7" />	
+					<img src="images/Skill-paladin-auraoflight.png" title="Aura of Light" class="paladin druid cleric" data-skill="Aura of Light" data-description="For 10 seconds, all of your attacks will heal you for 25% of the damage dealt." data-cooldown="20 sec" data-str="6" data-dex="" data-int="" data-skl="" data-end="6" data-cha="9" />	
+					<img src="images/Skill-paladin-powerinfusion.png" title="Power Infusion" class="paladin cleric" data-skill="Power Infusion" data-description="A surge of holy energy increases all damage you deal by 50% for 10 seconds." data-cooldown="30 sec" data-str="8" data-dex="" data-int="" data-skl="" data-end="6" data-cha="11" />	
+					<img src="images/Psv-paladin-stalwart.png" title="Stalwart" class="paladin warlord" data-skill="Stalwart" data-description="Increases your maximum health by 15%." data-cooldown="Passive" data-str="9" data-dex="" data-int="" data-skl="" data-end="7" data-cha="13" />	
+					<img src="images/Paladin_wrath.png" title="Wrath" class="paladin" data-skill="Wrath" data-description="Infuse your weapon with divine wrath for 10 seconds, causing your auto-attacks to deal additional damage, and chain holy lightning to nearby targets." data-cooldown="20 sec" data-str="11" data-dex="" data-int="" data-skl="" data-end="8" data-cha="15" />	
+					<img src="images/Paladin_cleanse.png" title="Cleanse" class="paladin druid cleric" data-skill="Cleanse" data-description="Removes all negative status effects from your body, such as poison." data-cooldown="8 sec" data-str="12" data-dex="" data-int="" data-skl="" data-end="10" data-cha="17" />	
+					<img src="images/Paladin_might.png" title="Might" class="paladin warlord" data-skill="Might" data-description="Increases your melee power by 20% of your armor value." data-cooldown="Passive" data-str="13" data-dex="" data-int="" data-skl="" data-end="12" data-cha="19" />	
+					<img src="images/Paladin_holy_word.png" title="Holy Word" class="paladin cleric" data-skill="Holy Word" data-description="Utter a word of prayer to heal your wounds." data-cooldown="30 sec" data-str="14" data-dex="" data-int="" data-skl="" data-end="14" data-cha="21" />	
+					<img src="images/Paladin_devout.png" title="Devout" class="paladin cleric" data-skill="Devout" data-description="Increases the damage of holy attacks by 10%" data-cooldown="Passive" data-str="16" data-dex="" data-int="" data-skl="" data-end="15" data-cha="23" />	
+					<img src="images/Paladin_mirror_shield.png" title="Mirror Shield" class="paladin summoner cleric" data-skill="Mirror Shield" data-description="Surrounds you with a shield which reflects projectiles for 8 seconds." data-cooldown="25 sec" data-str="18" data-dex="" data-int="" data-skl="" data-end="16" data-cha="25" />	
+					<img src="images/Paladin_word_of_retribution.png" title="Word of Retribution" class="paladin cleric" data-skill="Word of Retribution" data-description="Whenever you heal yourself, your damage is increased by 20% for 10 seconds" data-cooldown="Passive" data-str="20" data-dex="" data-int="" data-skl="" data-end="17" data-cha="28" />	
+					<img src="images/Paladin_radiance.png" title="Radiance" class="paladin cleric" data-skill="Radiance" data-description="A flash of holy light consumes the battlefield damaging and knocking foes to the ground." data-cooldown="20 sec" data-str="22" data-dex="" data-int="" data-skl="" data-end="19" data-cha="31" />					
+				</div>
+				<!-- Ranger -->
+				<div class="skills-col">
+					<img src="images/Archery.png" title="Archery" class="ranger samurai skirmisher hero" data-skill="Archery" data-description="Allows the use of bows. Bows are equipped in your secondary weapon slot, allowing you to equip both a melee and ranged weapon." data-cooldown="Passive" data-str="" data-dex="6" data-int="" data-skl="" data-end="" data-cha="" />
+					<img src="images/Aimed_Shot.png" title="Aimed Shot" class="ranger samurai skirmisher" data-skill="Aimed Shot" data-description="Fires an arrow which does up to 4x normal damage. Damage is increased the further the target is from you." data-cooldown="8 seconds" data-str="" data-dex="6" data-int="" data-skl="7" data-end="" data-cha="" />
+					<img src="images/Barrage-0.png" title="Barrage" class="ranger" data-skill="Barrage" data-description="Fire a salvo of arrows towards your target, dealing 2.5x damage to up to 5 targets in front of you." data-cooldown="15 seconds" data-str="" data-dex="7" data-int="" data-skl="9" data-end="" data-cha="" />
+					<img src="images/Mortal_Wounds.png" title="Mortal Wounds" class="ranger skirmisher" data-skill="Mortal Wounds" data-description="Healing effects are reduced 30% on enemies you deal damage to. This effect lingers for 10 seconds." data-cooldown="Passive" data-str="" data-dex="8" data-int="" data-skl="11" data-end="" data-cha="" />
+					<img src="images/Summon_Pet.png" title="Summon Pet" class="ranger hero summoner druid" data-skill="Summon Pet" data-description="Call forth a wolf companion which attacks your target. Using this ability while your pet is already active will heal your pet." data-cooldown="30 seconds" data-str="" data-dex="9" data-int="" data-skl="14" data-end="" data-cha="" />
+					<img src="images/Incendiary_Arrow.png" title="Incendiary Arrow" class="ranger" data-skill="Incendiary Arrow" data-description="Fire an explosive arrow which deals continuous fire damage around the point of impact." data-cooldown="16 seconds" data-str="" data-dex="11" data-int="" data-skl="16" data-end="" data-cha="" />
+					<img src="images/Huntsman.png" title="Huntsman" class="ranger" data-skill="Huntsman" data-description="Increase the damage you deal to animals and beasts by 15%" data-cooldown="Passive" data-str="" data-dex="13" data-int="" data-skl="19" data-end="" data-cha="" />
+					<img src="images/Bear_Trap.png" title="Bear Trap" class="ranger skirmisher" data-skill="Bear Trap" data-description="Deposit a bear trap in front of you. The first enemy to walk across it will take damage and be immobilized for 6 seconds." data-cooldown="8 seconds" data-str="" data-dex="15" data-int="6" data-skl="21" data-end="" data-cha="" />
+					<img src="images/Death_by_1000_Cuts.png" title="Death by 1000 Cuts" class="ranger" data-skill="Death by 1000 Cuts" data-description="Your auto-attacks with bows steadily wear your opponent down, increasing their damage taken by 1%, stacking indefinitely." data-cooldown="Passive" data-str="" data-dex="17" data-int="6" data-skl="24" data-end="" data-cha="" />
+					<img src="images/Vile_Bolt.png" title="Vile Bolt" class="ranger" data-skill="Vile Bolt" data-description="Launch a poisoned shot from your bow, which deals damage over time and slows the victim's actions." data-cooldown="20 seconds" data-str="" data-dex="18" data-int="7" data-skl="28" data-end="" data-cha="" />
+					<img src="images/Premeditate.png" title="Premeditate" class="ranger skirmisher" data-skill="Premeditate" data-description="After activating this ability, your next skill will not trigger a cooldown, allowing you to trigger the same ability twice in a row." data-cooldown="15 seconds" data-str="" data-dex="20" data-int="8" data-skl="31" data-end="" data-cha="" />
+					<img src="images/Leader.png" title="Leader" class="ranger warlord" data-skill="Leader" data-description="Increases the damage and health of companions by 50%." data-cooldown="Passive" data-str="" data-dex="21" data-int="9" data-skl="35" data-end="" data-cha="" />
+					<img src="images/Apollo_Strike.png" title="Apollo Strike" class="ranger" data-skill="Apollo Strike" data-description="Fire an arrow which strikes the target with immense force, knocking them down for 5 seconds and throwing them backwards." data-cooldown="20 seconds" data-str="" data-dex="23" data-int="9" data-skl="40" data-end="" data-cha="" />				
+				</div>
+				<!-- Rogue -->
+				<div class="skills-col">
+					<img src="images/Skill-rogue-sneakattack.png" title="Sneak Attack" class="rogue skirmisher" data-skill="Sneak Attack" data-description="Blindside your target for 6.5x normal damage, and gain 20% additional dodge chance for 3 sec. Requires a dagger." data-cooldown="9 seconds" data-str="" data-dex="6" data-int="" data-skl="" data-end="" data-cha="" />
+					<img src="images/Skill-rogue-poisonedknife.png" title="Poisoned Knife" class="rogue skirmisher" data-skill="Poisoned Knife" data-description="Throw a poisoned dagger at your target, which deals continuous damage over 10 seconds." data-cooldown="6 seconds" data-str="" data-dex="7" data-int="" data-skl="6" data-end="" data-cha="" />
+					<img src="images/Twist_the_Blade.png" title="Twist the Blade" class="rogue skirmisher" data-skill="Twist the Blade" data-description="If your target is effected by a damage-over-time effect, you deal 10% increased damage to them." data-cooldown="Passive" data-str="" data-dex="9" data-int="" data-skl="7" data-end="" data-cha="" />
+					<img src="images/Stealth.png" title="Stealth" class="rogue" data-skill="Stealth" data-description="Vanish into the shadows. Any attacks will cancel stealth, deal 50% more damage and always critically hit. Cannot stealth while enemies are targeting you." data-cooldown="1 second" data-str="" data-dex="11" data-int="" data-skl="8" data-end="" data-cha="" />
+					<img src="images/Lethal_Edge.png" title="Lethal Edge" class="rogue swashbuckler samurai skirmisher" data-skill="Lethal Edge" data-description="Increases critical strike chance with daggers and swords by 10%." data-cooldown="Passive" data-str="6" data-dex="13" data-int="" data-skl="9" data-end="" data-cha="" />
+					<img src="images/Thievery.png" title="Thievery" class="rogue skirmisher" data-skill="Thievery" data-description="Can be used to pickpocket your enemies for extra loot, or open locks on treasure chests." data-cooldown="1 second" data-str="6" data-dex="16" data-int="" data-skl="11" data-end="" data-cha="" />
+					<img src="images/Paralyctic_Knife.png" title="Paralytic Knife" class="rogue skirmisher" data-skill="Paralytic Knife" data-description="Throw a poisoned dagger at your target, which renders them paralyzed for 6 seconds." data-cooldown="20 seconds" data-str="6" data-dex="19" data-int="" data-skl="12" data-end="" data-cha="" />
+					<img src="images/Coup_de_Grace.png" title="Coup De Grace" class="rogue swashbuckler" data-skill="Coup De Grace" data-description="Increase your damage against stunned/knocked down enemies by 20%." data-cooldown="Passive" data-str="7" data-dex="22" data-int="" data-skl="13" data-end="" data-cha="" />
+					<img src="images/Envenom.png" title="Envenom" class="rogue skirmisher" data-skill="Envenom" data-description="Apply poison to your weapons, causing your next 5 weapon strikes to deal 30% more damage as pure poison." data-cooldown="30 seconds" data-str="7" data-dex="25" data-int="" data-skl="15" data-end="" data-cha="" />
+					<img src="images/Pursuit.png" title="Pursuit" class="rogue swashbuckler" data-skill="Pursuit" data-description="Increases your movement speed by 20%." data-cooldown="Passive" data-str="7" data-dex="29" data-int="" data-skl="16" data-end="" data-cha="" />
+					<img src="images/Expose_Weakness.png" title="Expose Weakness" class="rogue swashbuckler" data-skill="Expose Weakness" data-description="A precision strike that permanently disrupts a target's damage resistances, leaving them highly vulnerable. Stacks up to 3 times." data-cooldown="25 seconds" data-str="9" data-dex="32" data-int="" data-skl="17" data-end="" data-cha="" />
+					<img src="images/Crippling_Blows.png" title="Crippling Blows" class="rogue swashbuckler" data-skill="Crippling Blows" data-description="Your attacks steadily weaken your foe, reducing their damage dealt by 2%, stacking up to 5x." data-cooldown="Passive" data-str="10" data-dex="35" data-int="" data-skl="19" data-end="" data-cha="" />
+					<img src="images/Shadowstep.png" title="Shadowstep" class="rogue" data-skill="Shadowstep" data-description="Vanish into the shadows, teleport behind your target, and perform a lethal strike for 7.5x normal weapon damage. Requires a dagger." data-cooldown="20 seconds" data-str="11" data-dex="39" data-int="" data-skl="21" data-end="" data-cha="" />				
+				</div>
+				<!-- Witch -->
+				<div class="skills-col">
+					<img src="images/1_Drain_Life.png" title="Drain Life" class="witch hexblade warlock" data-skill="Drain Life" data-description="Deals unholy damage to your current target, and heals you for the damage dealt." data-cooldown="15 seconds" data-str="" data-dex="" data-int="8" data-skl="" data-end="6" data-cha="" />
+					<img src="images/Plague-0.png" title="Plague" class="witch summoner" data-skill="Plague" data-description="Your target is consumed in noxious fumes, poisoning targets near them for 10 sec." data-cooldown="18 seconds" data-str="" data-dex="" data-int="9" data-skl="" data-end="7" data-cha="" />
+					<img src="images/Lasting_Affliction-0.png" title="Lasting Affliction" class="witch" data-skill="Lasting Affliction" data-description="Increases the duration of negative effects you apply by 2 seconds." data-cooldown="Passive" data-str="" data-dex="" data-int="11" data-skl="" data-end="8" data-cha="" />
+					<img src="images/3_Blood_Magic.png" title="Blood Magic" class="witch hexblade" data-skill="Blood Magic" data-description="Sacrifice 20% of your own health to imbue your next special attack with dark power, increasing its damage by 20% and critical chance by 100%." data-cooldown="1 second" data-str="" data-dex="" data-int="13" data-skl="" data-end="9" data-cha="" />
+					<img src="images/Dark_Arts-0.png" title="Dark Arts" class="witch hexblade warlock" data-skill="Dark Arts" data-description="Increases your poison and unholy damage by 10%." data-cooldown="Passive" data-str="" data-dex="" data-int="16" data-skl="" data-end="10" data-cha="" />
+					<img src="images/5_Debilitate.png" title="Debilitate" class="witch" data-skill="Debilitate" data-description="Cripples your target's offensive power by 75% for 5 seconds." data-cooldown="25 seconds" data-str="" data-dex="" data-int="19" data-skl="" data-end="11" data-cha="" />
+					<img src="images/Toxic_Affinity-0.png" title="Toxic Affinity" class="witch" data-skill="Toxic Affinity" data-description="Reduces damage taken from poison and unholy effects by 25%." data-cooldown="Passive" data-str="" data-dex="" data-int="21" data-skl="" data-end="13" data-cha="" />
+					<img src="images/Hex.png" title="Hex" class="witch warlock druid" data-skill="Hex" data-description="Turn your target into a toad for 6 seconds. While transformed, they are helpless and take 25% additional damage." data-cooldown="30 seconds" data-str="" data-dex="" data-int="25" data-skl="" data-end="14" data-cha="" />
+					<img src="images/Shadow_Infusion-0.png" title="Shadow Infusion" class="witch hexblade" data-skill="Shadow Infusion" data-description="You regenerate an additional 2 health every second." data-cooldown="Passive" data-str="" data-dex="" data-int="28" data-skl="" data-end="16" data-cha="" />
+					<img src="images/HORROR.png" title="Horror" class="witch warlock" data-skill="Horror" data-description="All nearby foes are terrified, paralyzed or instantly struck dead. The severity of the effect is increased the closer the victim is." data-cooldown="25 seconds" data-str="" data-dex="" data-int="31" data-skl="" data-end="18" data-cha="6" />
+					<img src="images/Tornado.png" title="Tornado" class="witch sorcerer summoner druid" data-skill="Tornado" data-description="Release a turbulent twister picking up enemy's and grouping them together.(ideal for setting up an AOE attack)." data-cooldown="15 seconds" data-str="" data-dex="" data-int="35" data-skl="" data-end="20" data-cha="6" />
+					<img src="images/Life_Leech.png" title="Life Leech" class="witch hexblade warlock" data-skill="Life Leech" data-description="Causes all of your attacks to heal you for 5% of the damage done." data-cooldown="Passive" data-str="" data-dex="" data-int="37" data-skl="" data-end="23" data-cha="7" />
+					<img src="images/Calamity.png" title="Calamity" class="witch hexblade" data-skill="Calamity" data-description="Unleashes a powerful blast of entropic energy which deals massive unholy damage to your current target." data-cooldown="24 seconds" data-str="" data-dex="" data-int="40" data-skl="" data-end="25" data-cha="9" />				
+				</div>
+				<!-- Wizard -->
+				<div class="skills-col">
+					<img src="images/Chainlightning.png" title="Chain Lightning" class="wizard hero sorcerer druid" data-skill="Chain Lightning" data-description="Strikes your target with a bolt of lightning, which then proceeds to jump to nearby targets if possible, dealing less damage with each jump." data-cooldown="8 sec" data-str="" data-dex="" data-int="7" data-skl="" data-end="" data-cha="" />
+					<img src="images/Staffmaster.png" title="Staff Master" class="wizard sorcerer druid" data-skill="Staff Master" data-description="Allows you to wield magic staves." data-cooldown="Passive" data-str="" data-dex="" data-int="8" data-skl="6" data-end="" data-cha="" />
+					<img src="images/Meteor.png" title="Meteor" class="wizard hero sorcerer summoner" data-skill="Meteor" data-description="Calls down a meteor from the heavens, blasting your target and any nearby foes with heavy fire damage." data-cooldown="15 sec" data-str="" data-dex="" data-int="10" data-skl="7" data-end="" data-cha="" />
+					<img src="images/Wildmagic.png" title="Wild Magic" class="wizard sorcerer" data-skill="Wild Magic" data-description="Increases critical strike chance with all spells by 10%" data-cooldown="Passive" data-str="" data-dex="" data-int="12" data-skl="8" data-end="" data-cha="" />
+					<img src="images/Blizzard.png" title="Blizzard" class="wizard hero sorcerer summoner" data-skill="Blizzard" data-description="Deploys a vortex of frost towards your target. Any enemies caught in the storm take damage and move at reduced speed." data-cooldown="16 sec" data-str="" data-dex="" data-int="15" data-skl="9" data-end="" data-cha="" />
+					<img src="images/Teleport.png" title="Teleport" class="wizard druid" data-skill="Teleport" data-description="Once activated, your next 5 movement commands cause you to instantly teleport to your destination." data-cooldown="18 sec" data-str="" data-dex="" data-int="18" data-skl="10" data-end="" data-cha="" />
+					<img src="images/Elementalist.png" title="Elementalist" class="wizard sorcerer" data-skill="Elementalist" data-description="Increases your fire, frost and lightning damage by 10%." data-cooldown="Passive" data-str="" data-dex="" data-int="22" data-skl="11" data-end="" data-cha="" />
+					<img src="images/Conflagrate.png" title="Conflagrate" class="wizard sorcerer" data-skill="Conflagrate" data-description="Consumes your target in fire, dealing damage over time and sending them into a panic for 8 seconds." data-cooldown="20 sec" data-str="" data-dex="" data-int="25" data-skl="13" data-end="" data-cha="" />
+					<img src="images/Massdestruction.png" title="Mass Destruction" class="wizard sorcerer summoner" data-skill="Mass Destruction" data-description="Increases the damage of all area-of-effect attacks and spells by 10%." data-cooldown="Passive" data-str="" data-dex="" data-int="29" data-skl="14" data-end="" data-cha="" />
+					<img src="images/Thunderbolt.png" title="Thunderbolt" class="wizard hero sorcerer" data-skill="Thunderbolt" data-description="Your body explodes with an electric shockwave, dealing damage to nearby enemies and knocking them down briefly." data-cooldown="20 sec" data-str="" data-dex="" data-int="33" data-skl="16" data-end="" data-cha="" />
+					<img src="images/Glacial.png" title="Glacial Spike" class="wizard sorcerer summoner" data-skill="Glacial Spike" data-description="Launches a spear of ice at your target. Any enemies between you and your target also take damage as the spike forces through them." data-cooldown="25 sec" data-str="" data-dex="" data-int="38" data-skl="17" data-end="" data-cha="" />
+					<img src="images/Student.png" title="Student of the Mind" class="wizard druid" data-skill="Student of the Mind" data-description="Increases your cooldown recovery speed by 15%." data-cooldown="Passive" data-str="" data-dex="" data-int="42" data-skl="19" data-end="" data-cha="" />
+					<img src="images/Timestop.png" title="Time Stop" class="wizard" data-skill="Time Stop" data-description="A space-time rift renders all enemies frozen and helpless for 5 seconds." data-cooldown="40 sec" data-str="" data-dex="" data-int="48" data-skl="20" data-end="" data-cha="" />
+				</div>
+			</div>
+		</div>
+		<!-- Information -->
+		<div class="panel">
+			<div class="information">
+				<strong>STEP 1:</strong> Allocate 150 points between Strength, Dexterity, Intelligence, Skill, Endurance, Charisma attributes.<br>
+				<strong>STEP 2:</strong> Click and choose up to 24 skills icons.<br>
+				<strong>STEP 3:</strong> Click the COMPLETE button to generate your RPG class profile.<br>
+				<strong>STEP 4:</strong> Click the PRINT button to print your RPG class profile.<br>
+				<strong>STEP 5:</strong> Click the RESET button to refresh your selections.<br>
+			</div>
+		</div>
+		<!-- Action Buttons -->
+		<div class="panel buttons">
+			<a id="btnComplete" href="javascript:void(0);" onclick="complete();">COMPLETE</a>
+			<a id="btnPrint" href="javascript:void(0);" onclick="print();">PRINT</a>
+			<a id="btnReset" href="javascript:void(0);" onclick="reset();">RESET</a>
+		</div>
+		<!-- Results -->
+		<div class="panel">
+			<div id="results" class="results">
+			</div>
+			<div id="resultsPreview" class="resultsPreview">
+			</div>
+		</div>
+		<script type="text/javascript" src="scripts/jquery-3.6.0.min.js"></script>
+		<script type="text/javascript" src="scripts/html2canvas.js"></script>
+		<script type="text/javascript" src="scripts/dev.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				disableSkillButtons();
+				loadFeatures();
+			});
+		</script>
+	</body>
+</html>
